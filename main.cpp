@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include <vector>
 #include <cassert>
 #include <cmath>
@@ -8,6 +7,64 @@
 using namespace std;
 
 class Solution {
+
+public:
+    int findContentChildren(vector<int>& g, vector<int>& s) {
+//        g贪心指数  s： 饼干size
+        long m = g.size();
+        long n = s.size();
+
+//        把饼干size和贪心指数从大到小排列O(nlogn)
+        sort(g.begin(), g.end(), greater<int>());
+        sort(s.begin(), s.end(), greater<int>());
+
+        int si = 0, gi = 0;
+        int res = 0;
+
+//        贪心算法O(n)
+        while(si < n && gi < m) {
+
+            if(s[si] >= g[gi] ) {
+                res ++;
+                si ++;
+                gi ++;
+            }
+            else{
+                gi ++;
+            }
+        }
+
+        return res;
+
+
+    }
+
+    int lcs(vector<char> s1, vector<char> s2) {
+//        s1[0, m-1]  s2[0, n-1]
+        long m = s1.size();
+        long n = s2.size();
+
+        int dp[m+1][n+1];
+
+        for (int i = 0; i <= m; ++i) {
+            for (int j = 0; j < n; ++j) {
+
+                if(i == 0 || j == 0) {
+                    dp[i][j] = 0;
+                }
+                else if(s1[i] == s2[j]) {
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                }
+                else {
+                    dp[i][j] = max( dp[i-1][j], dp[i][j-1]);
+                }
+            }
+        }
+
+        return dp[m][n];
+
+    }
+
 private:
 
     int tryRob(vector<int>& nums, int index) {
